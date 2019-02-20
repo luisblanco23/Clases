@@ -1,0 +1,13 @@
+tasas<-read.csv("C:\\Users\\ALUMNO-D7\\Documents\\Tasas.csv")
+tasas
+xm<-mean(tasas$Tasa.de.desocupación)
+xm
+x<-(tasas$Tasa.de.desocupación-xm)
+x
+ym<-mean(tasas$Tasa.de.trabajo.asalariado)
+y<-sum(tasas$Tasa.de.trabajo.asalariado-ym)
+n<- length(tasas$Tasa.de.desocupación)
+covtas<-sum((tasas$Tasa.de.desocupación-mean( tasas$Tasa.de.desocupación))*(tasas$Tasa.de.trabajo.asalariado-mean(tasas$Tasa.de.trabajo.asalariado)))/(n-1)
+covtas
+cor(tasas$Tasa.de.desocupación,tasas$Tasa.de.trabajo.asalariado)
+cov(tasas$Tasa.de.desocupación,tasas$Tasa.de.trabajo.asalariado)
