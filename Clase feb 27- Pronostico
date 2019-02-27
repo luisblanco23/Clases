@@ -1,0 +1,26 @@
+pib<-read.csv("C://Users//ALUMNO-D7//Documents//Pibmex.csv")
+require(fpp)
+require(forecast)
+pibt<-ts(pib, frequency=1,start=1961)
+mod1<-ses(pibt,alpha=.1,initial="simple",h=8)
+mod2<-ses(pibt, alpha=.3, initial="simple", h=8)
+mod3<-ses(pibt, alpha=.9, h=8)
+plot(mod1,ylab="pib", xlab="Año", main="PIB", type="o")
+lines(fitted(mod1), col="brown", type="o")
+lines(fitted(mod2), col="red", type="o")
+lines(fitted(mod3), col="green", type="o")
+legend("topleft",lty=1, col=c(1,"blue", "red","green"),c("data",expression(alpha==.1),expression(alpha==.3), expression(aplha==.9)),pch=1)
+#Se acerca mas a los datos mod3
+######################Ejercicio###########################
+#Separar datos de entrenamiento y prueba (20%) con la funcion windows
+#Graficar los modelos solo en lo que corresponde a los datos de prueba
+pibt1<-window(pibt,start=1992,end=c(2006,1))
+pibt2<-window(pibt, start=2006, end=c(2017,1))
+mod11<-ses(pibt2, alpha=.1, initial="simple", h=8)
+mod22<-ses(pibt2, aplha=.3, initial="simple", h=8)
+mod33<-ses(pibt2, h=8)
+plot(mod11,ylab="pib", xlab="Año", main="PIB", type="o")
+lines(fitted(mod11), col="brown", type="o")
+lines(fitted(mod22), col="red", type="o")
+lines(fitted(mod33), col="green", type="o")
+legend("topleft",lty=1, col=c(1,"blue", "red","green"),c("data",expression(alpha==.1),expression(alpha==.3), expression(aplha==.9)),pch=1)
