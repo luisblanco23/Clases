@@ -1,0 +1,22 @@
+require(fpp2)
+require(forecast)
+require(ggplot2)
+beer2<- window(ausbeer,start=1992, end=c(2007,4))
+beerfit1<-meanf(beer2,h=10)
+beerfit2<-rwf(beer2,h=10)
+beerfit3<-snaive(beer2,h=10)
+autoplot(window(ausbeer,start=1992))+
+  autolayer(beerfit1, series="media",PI=FALSE)+
+  autolayer(beerfit2, series="ingenuo", PI=FALSE)+
+  autolayer(beerfit3, series="ingenuo estcional", PI=FALSE)+
+  xlab("año")+ylab("litros")+
+  ggtitle("pronóstico")+
+  guides(colour=guide_legend(title="pronóstico"))
+#La grafica muestra 3 métodos de pronóstico aplicados a
+#la producción de cerveza australiana trumestral utilizando datos
+#hasta finales de 2007. También se muestran los valores reales
+#para el periodo 2008-2010
+beer3<- window(ausbeer, start=2008)
+accuracy(beerfit1,beer3)
+accuracy(beerfit2,beer3)
+accuracy(beerfit3,beer3)#la fn accuracy calcula los errores
