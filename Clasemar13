@@ -1,0 +1,66 @@
+al<- window(ausair, start=1990)
+require (forecast)
+require (fpp2)
+prono<- holt(al,h=5)
+autoplot(prono)
+prono
+###Ejemplo amortiguado####
+prono1<- holt(al,h=15)
+prono2<-holt(al,damped=TRUE,phi=.9,h=15)
+prono3<-ses(al,aplha=.9,initial="simple",h=15)
+autoplot(al)+
+  autolayer(prono1,series="Holt",PI=FALSE)+
+  autolayer(prono2,series="Amortiguado Holt", PI=FALSE)+
+  autolayer(prono3,series="Suavizado",PI=FALSE)+
+  ggtitle("Pronosticos")+xlab("Año")+
+  ylab("Pasajeros")+
+  guides(colour=guide_legend(title="Prono"))
+e1<-tsCV(al,ses,h=1)
+e2<-tsCV(al,holt,h=1)
+e3<-tsCV(al,holt,damped=TRUE,h=1)
+MSE:
+  mean(e1^2,na.rm=TRUE)
+  #10.58528
+  mean(e2^2, na.rm=TRUE)
+  #6.577382
+  mean(e3^2, na.rm=TRUE)
+  #7.386132
+MAE:
+  mean(abs(e1), na.rm=TRUE)
+  #2.430085
+  mean(abs(e2), na.rm=TRUE)
+  #1.804368
+  mean(abs(e3), na.rm=TRUE)
+  #1.868162
+pib<-read.csv("C://Users//ALUMNO-D7//Documents//pib1.csv")
+PIB<-ts(pib,start=1980,end=2017)
+pibf<-window(PIB,start=2009)
+fore<-holt(pibf,h=5)
+autoplot(fore)
+fore1<-holt(pibf,h=5)
+fore2<-holt(pibf,damped=TRUE,phi=.9,h=5)
+fore3<-ses(pibf,aplha=.6,initial="simple",h=5)
+autoplot(pibf)+
+  autolayer(fore1,series="Holt",PI=FALSE)+
+  autolayer(fore2,series="Amortiguado Holt", PI=FALSE)+
+  autolayer(fore3,series="Suavizado",PI=FALSE)+
+  ggtitle("Pronosticos")+xlab("Año")+
+  ylab("PIB")+
+  guides(colour=guide_legend(title="Prono"))
+e1<-tsCV(pibf,ses,h=1)
+e2<-tsCV(pibf,holt,h=1)
+e3<-tsCV(pibf,holt,damped=TRUE,h=1)
+MSE:
+  mean(e1^2,na.rm=TRUE)
+  #5.286193
+  mean(e2^2, na.rm=TRUE)
+  #6.541673
+  mean(e3^2, na.rm=TRUE)
+  #6.541673
+MAE:
+  mean(abs(e1), na.rm=TRUE)
+  #1.743253
+  mean(abs(e2), na.rm=TRUE)
+  #1.982778
+  mean(abs(e3), na.rm=TRUE)
+  #1.98278
