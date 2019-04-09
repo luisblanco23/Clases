@@ -1,0 +1,48 @@
+#############################################America Movil (BMV)#######################################################
+am<-read.csv("C:/Users/09223476/Documents/Ammo.csv")#Datos America Móvil
+amts<-ts(am[,2],frequency=252,start=2018)
+plot(amts)#Representa cierta tendencia a la baja sin estacionalidad
+adf.test(amts)#p-value=.3344 -> No es estacionaria
+dam<-diff(amts)
+plot(dam)
+adf.test(dam)#Es estacionaria con un p-value=.01
+par(mfrow=c(1,2))
+acf(dam)
+pacf(dam)#Dado el comportamiento sinuoso del ACF, se optara por un modelo ARIMA (p,d,0)
+modam1<-Arima(amts,order=c(1,1,0))
+modam2<-Arima(amts,order=c(2,1,0))
+modam3<-Arima(amts,order=c(3,1,0))
+modam4<-Arima(amts,order=c(4,1,0))
+modam1
+modam2
+modam3
+modam4#Con base en el valor mas bajo del AICc, se elige el modelo 2**??.
+amres<-residuals(modam2)
+Box.test(amres,lag=12,type="Ljung-Box")#Los residuales son ruido blanco
+amfcst<-forecast(modam2,h=12)
+plot(forecast(amfcst,h=12),include=18)
+auto.arima(amts)#Sugiere un modelo ARIMA con (2,1,2) con un AICc=-26.93
+#######################################AMD (NASDAQ)##################################################################
+amd<-read.csv("C:/Users/09223476/Documents/AMD.csv")
+amdts<-ts(amd[,2],frequency=252,start=2018)
+plot(amdts)#Se observa una tendencia a la alza sin estacionalidad
+adf.test(amdts)#Con un p-value=.6315 no es estacionaria, se aplicara una diferenciación
+damd<-diff(amdts)
+plot(damd)
+adf.test(damd)#Es estacionaria
+par(mfrow=c(1,2))
+acf(dam)
+pacf(dam)#Se eligira un modelo ARIMA (0,d,q) por el comportamiento sinuoso del grafico PACF
+modamd1<-Arima(amdts,order=c(0,1,1))
+modamd2<-Arima(amdts,order=c(0,1,2))
+modamd3<-Arima(amdts,order=c(0,1,3))
+modamd4<-Arima(amdts,order=c(0,1,4))
+modamd1
+modamd2
+modamd3#Con base en el valor mas bajo del AICc(681.4), se elige el modelo 3
+modamd4
+amdres<- residuals(modamd3)
+Box.test(amdres,lag=12,type="Ljung-Box")#Se considera los residuales ruido blanco
+amdfcst<-forecast(modamd3,h=12)
+plot(forecast(amdfcst,h=12),include=18)
+auto.arima(amdts)#Sugiere un modelo ARIMA con (0,1,0) con un AICc=684.49
